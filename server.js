@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv").config();
 const connectDB = require("./config/database");
@@ -12,12 +13,14 @@ app.use(cookieParser());
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+
 // Add image static path
 app.use("/upload", express.static(path.join(__dirname, "upload")));
 
 // Routes
-app.use("/api/v1", authRouter);
-app.use("/api/v1", todoRouter);
+app.use("/api/auth", authRouter);
+app.use("/api", todoRouter);
 
 // Database Connection and Server Start
 connectDB().then(() => {

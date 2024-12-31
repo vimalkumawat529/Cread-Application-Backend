@@ -69,9 +69,12 @@ const userLogin = async (req, res) => {
     });
 
     res.cookie("token", token, {
-      httpOnly: true,
+      httpOnly: false, // Client can access
       maxAge: 24 * 60 * 60 * 1000,
-    }); // 1 day
+      secure: false, // Set to true in production (HTTPS)
+      sameSite: "Lax", // Allows cookie for same-site requests
+      path: "/",
+    });
 
     res.status(200).json({
       success: true,
